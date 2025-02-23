@@ -9,13 +9,8 @@ export default function ProductosMenuPage() {
       <nav>
         <ul>
           <li>
-            <Link href="/productos/buscar-id">
-              <button className={styles.botones}>Buscar Productos por identificador</button>
-            </Link>
-          </li>
-          <li>
-            <Link href="/productos/buscar-todo">
-              <button className={styles.botones}>Buscar todos los Productos</button>
+            <Link href="/productos/buscar">
+              <button className={styles.botones}>Buscar Productos</button>
             </Link>
           </li>
           <li>

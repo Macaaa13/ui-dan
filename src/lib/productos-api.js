@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:6180/api/productos';
 
 // Buscar producto por Id
-async function buscarProducto(id, limit, offset = 0) {
+async function buscarProductoPorId(id, limit, offset = 0) {
     const apiUrl = `${API_URL}/${id}`;
     console.log('Buscando producto en: ',apiUrl);
     try {
@@ -16,6 +16,34 @@ async function buscarProducto(id, limit, offset = 0) {
       return [];
     }
   }
+
+  // Buscar productos con filtros
+async function buscarProductosPorFiltro(filtros) {
+    const { id, nombre, precioMin, precioMax, stockMin, stockMax } = filtros;
+
+    // Construir la URL con los parámetros de búsqueda
+    const url = new URL(`${API_URL}/buscar`);
+    if (id) url.searchParams.append('id', id);
+    if (nombre) url.searchParams.append('nombre', nombre);
+    if (precioMin) url.searchParams.append('precioMin', precioMin);
+    if (precioMax) url.searchParams.append('precioMax', precioMax);
+    if (stockMin) url.searchParams.append('stockMin', stockMin);
+    if (stockMax) url.searchParams.append('stockMax', stockMax);
+
+    console.log('Buscando productos con filtros en:', url.toString());
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch productos:", error);
+        return [];
+    }
+}
   
 // Crear un producto
 async function crearProducto(producto) {
@@ -121,7 +149,8 @@ async function actualizarDescuento(descuento) {
 }
 
 export {
-    buscarProducto,
+    buscarProductoPorId,
+    buscarProductosPorFiltro,
     crearProducto,
     obtenerProductos,
     eliminarProducto,
