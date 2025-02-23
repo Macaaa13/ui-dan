@@ -1,58 +1,40 @@
 'use client';
-import { useState } from 'react';
-
 import Link from 'next/link';
-import { buscarProducto, getProductos } from "@/lib/productos-api";
+import styles from "./page.module.css";
 
-export default function Productos() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState([]);
-
-  
-  const handleSearch = async () => {
-    const lista = await getProductos();
-    //console.log(lista);
-    /*
-    // Simulate a search by filtering some dummy data
-    const dummyData = [
-      { id: 1, name: 'Product 1' },
-      { id: 2, name: 'Product 2' },
-    ];
-    setResults(dummyData.filter(product => product.name.includes(searchTerm) || product.id.toString() === searchTerm));
-  */
-  };
-
+export default function ProductosMenuPage() {
   return (
-    <>
-      <h1>Productos Page</h1>
-      <input 
-        type="text" 
-        placeholder="Buscar por número o nombre de producto" 
-        value={searchTerm} 
-        onChange={(e) => setSearchTerm(e.target.value)} 
-      />
-      <button onClick={handleSearch}>Buscar</button>
-      <Link href="/productos/new">
-        <button>Crear nuevo producto</button>
-      </Link>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map(product => (
-            <tr key={product.id}>
-              <td>
-                <Link href={`/productos/${product.id}`}>{product.id}</Link>
-              </td>
-              <td>{product.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+    <div>
+      <h1>Menú de Productos</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/productos/buscar-id">
+              <button className={styles.botones}>Buscar Productos por identificador</button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/productos/buscar-todo">
+              <button className={styles.botones}>Buscar todos los Productos</button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/productos/nuevo">
+              <button className={styles.botones}>Crear Nuevo Producto</button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/productos/ingresar-orden">
+              <button className={styles.botones}>Ingresar Orden de Provisión</button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/productos/descuento">
+              <button className={styles.botones}>Actualizar Descuento</button>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
-};
+}
