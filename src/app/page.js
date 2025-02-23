@@ -8,13 +8,13 @@ export default function Home() {
       <div>
       <h1>Gestion de Pedidos DAN</h1>
       <Link href="/clientes">
-        <button className={styles.botones}>Go to Clientes</button>
+        <button className={styles.botones}>Ir al menú de Clientes</button>
       </Link>
       <Link href="/productos">
-        <button className={styles.botones} >Go to Productos</button>
+        <button className={styles.botones} >Ir al menú de Productos</button>
       </Link>
       <Link href="/pedidos">
-        <button className={styles.botones}>Go to Pedidos</button>
+        <button className={styles.botones}>Ir al menú de Pedidos</button>
       </Link>
       </div>
     </main>

@@ -97,10 +97,31 @@ async function actualizarObra(id, obra) {
     }
 }
 
+async function asignarClienteAObra(idObra, idCliente) {
+    try {
+        const response = await fetch(`${API_URL}/${idObra}/asignar-cliente/${idCliente}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return true; // Indica que la asignación fue exitosa
+    } catch (error) {
+        console.error("Error al asignar el cliente a la obra:", error);
+        throw error;
+    }
+}
+
 export {
     buscarObra,
     crearObra,
     obtenerObras,
     eliminarObra,
-    actualizarObra
+    actualizarObra,
+    asignarClienteAObra
 };

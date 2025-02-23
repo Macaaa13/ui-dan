@@ -15,6 +15,29 @@ async function obtenerClientes() {
     }
 }
 
+async function buscarClientesPorFiltro(filtros) {
+    const { nombre, correoElectronico, cuit } = filtros;
+
+    const url = new URL(`${API_URL}/buscar`);
+    if (nombre) url.searchParams.append('nombre', nombre);
+    if (correoElectronico) url.searchParams.append('correoElectronico', correoElectronico);
+    if (cuit) url.searchParams.append('cuit', cuit);
+
+    console.log('Buscando clientes con filtros en:', url.toString());
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch clientes:", error);
+        return [];
+    }
+}
+
 // Obtener un cliente por ID
 async function obtenerClientePorId(id) {
     const apiUrl = `${API_URL}/${id}`;
@@ -122,6 +145,7 @@ async function eliminarCliente(id) {
 export {
     obtenerClientes,
     obtenerClientePorId,
+    buscarClientesPorFiltro,
     crearCliente,
     actualizarCliente,
     agregarUsuariosHabilitados,
