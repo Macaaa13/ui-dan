@@ -1,0 +1,177 @@
+.container { 
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 900px;
+}
+  
+  .title {
+    font-size: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .filtersGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .filterRow {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  
+  .input {
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    color: black;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .table {
+    width: 100%;    
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* Tamaño de las columnas */
+  .table th:nth-child(2) { width: 200px; } /* Nombre */
+  .table th:nth-child(3) { width: 200px; } /* Correo */
+  .table th:nth-child(5) { width: 50px; } /* Máximo descubierto */
+  .table th:nth-child(6) { width: 50px; } /* Obras en ejecución */
+  .table th:nth-child(7) { width: 100px; } /* Acciones */
+
+  .table th,
+  .table td {
+    border: 2px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
+    color: black;
+  }
+  
+  .actionButton,
+  .deleteButton {
+    position: relative;
+    padding: 5px 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  
+  .actionButton {
+    background-color: #ffeb3b; /* Color de fondo amarillo para el botón editar */
+    color: black; /* Color del texto para el botón editar */
+    margin-right: 5px;
+  }
+  
+  .deleteButton {
+    background-color: #dc3545; /* Color de fondo rojo para el botón eliminar */
+    color: white; /* Color del texto para el botón eliminar */
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .actionButton:hover {
+    background-color: #fdd835; /* Fondo más oscuro para el hover del botón editar */
+  }
+  
+  .deleteButton:hover {
+    background-color: #c82333; /* Fondo más oscuro para el hover del botón eliminar */
+  }
+  
+  .actionButton::after {
+    content: "Editar";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 120%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+  
+  .deleteButton::after {
+    content: "Eliminar";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 120%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+  
+  /* Mostrar el tooltip al pasar el mouse */
+  .deleteButton:hover::after,
+  .actionButton:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+   
+  
+  .backButton {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .backButton:hover {
+    background-color: #5a6268;
+  }
+  

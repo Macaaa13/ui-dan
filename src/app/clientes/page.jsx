@@ -4,27 +4,32 @@ import styles from "./page.module.css";
 
 export default function ClientesMenuPage() {
   return (
-    <div>
-      <h1>Menú de Clientes</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link href="/clientes/buscar">
-              <button className={styles.botones}>Buscar Clientes</button>
-            </Link>
-          </li>
-          <li>
-            <Link href="/clientes/nuevo">
-              <button className={styles.botones}>Crear Nuevo Cliente</button>
-            </Link>
-          </li>
-          <li>
-            <Link href="/clientes/asignar-obra">
-              <button className={styles.botones}>Asignar obra</button>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+    <div className={styles.container}>
+      {/* Encabezado con imagen de fondo */}
+      <div className={styles.titleContainer}>
+        <h1 className={styles.title}>Menú de Clientes</h1>
+      </div>
+
+      {/* Contenedor de opciones */}
+      <div className={styles.submenuContainer}>
+        <Link href="/clientes/buscar">
+          <div className={`${styles.submenuItem} ${styles.blue}`}>
+            <span>🔍</span> Buscar Clientes
+          </div>
+        </Link>
+
+        <Link href="/clientes/nuevo">
+          <div className={`${styles.submenuItem} ${styles.green}`}>
+            <span>➕</span> Crear Cliente
+          </div>
+        </Link>
+
+        <Link href="/clientes/asignar-obra">
+          <div className={`${styles.submenuItem} ${styles.yellow}`}>
+            <span>🏗️</span> Asignar Obra
+          </div>
+        </Link>
+      </div>
     </div>
   );
 }

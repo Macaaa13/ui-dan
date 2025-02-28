@@ -1,0 +1,74 @@
+.container {
+    width: 375px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: black;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+  }
+  
+  .label {
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+  }
+  
+  .input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    width: 100%;
+    color: black;
+  }
+  
+  .button {
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    transition: background 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #218838;
+  }
+  
+  .backContainer {
+    text-align: center;
+  }
+  
+  .backButton {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .backButton:hover {
+    background-color: #5a6268;
+  }
+  

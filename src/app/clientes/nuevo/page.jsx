@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { crearCliente } from '@/lib/clientes-api'; 
 import Link from 'next/link';
+import styles from './page.module.css';  // Importar los estilos
 
 export default function NewClientePage() {
   const router = useRouter();
@@ -25,62 +26,85 @@ export default function NewClientePage() {
   };
 
   return (
-    <div>
-      <h1>Crear nuevo cliente</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Crear nuevo cliente</h1>
       <form onSubmit={handleSubmit}>
         {/* Campo: Nombre */}
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={formData.nombre}
-          onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Nombre</label>
+          <input
+            type="text"
+            placeholder="Nombre"
+            value={formData.nombre}
+            onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: Correo Electrónico */}
-        <input
-          type="email"
-          placeholder="Correo Electrónico"
-          value={formData.correoElectronico}
-          onChange={(e) => setFormData({ ...formData, correoElectronico: e.target.value })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Correo Electrónico</label>
+          <input
+            type="email"
+            placeholder="Correo Electrónico"
+            value={formData.correoElectronico}
+            onChange={(e) => setFormData({ ...formData, correoElectronico: e.target.value })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: CUIT */}
-        <input
-          type="text"
-          placeholder="CUIT"
-          value={formData.cuit}
-          onChange={(e) => setFormData({ ...formData, cuit: e.target.value })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>CUIT</label>
+          <input
+            type="text"
+            placeholder="CUIT"
+            value={formData.cuit}
+            onChange={(e) => setFormData({ ...formData, cuit: e.target.value })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: Máximo Descubierto */}
-        <input
-          type="number"
-          placeholder="Máximo Descubierto"
-          value={formData.maximoDescubierto}
-          onChange={(e) => setFormData({ ...formData, maximoDescubierto: parseFloat(e.target.value) })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Máximo Descubierto</label>
+          <input
+            type="number"
+            placeholder="Máximo Descubierto"
+            value={formData.maximoDescubierto}
+            onChange={(e) => setFormData({ ...formData, maximoDescubierto: parseFloat(e.target.value) })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: Máximo Obras en Ejecución */}
-        <input
-          type="number"
-          placeholder="Máximo Obras en Ejecución"
-          value={formData.maxObrasEjecucion}
-          onChange={(e) => setFormData({ ...formData, maxObrasEjecucion: parseInt(e.target.value) })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Máximo Obras en Ejecución</label>
+          <input
+            type="number"
+            placeholder="Máximo Obras en Ejecución"
+            value={formData.maxObrasEjecucion}
+            onChange={(e) => setFormData({ ...formData, maxObrasEjecucion: parseInt(e.target.value) })}
+            className={styles.input}
+            required
+          />
+        </div>
 
-        {/* Botón para crear el cliente */}
-        <button type="submit">Crear cliente</button>
+        {/* Botones */}
+        <div className={styles.buttonsContainer}>
+          {/* Botón para volver al menú */}
+          <Link href="/clientes">
+            <button className={styles.backButton}>Volver al Menú</button>
+          </Link>
+          
+          {/* Botón para crear el cliente */}
+          <button type="submit" className={styles.createButton}>Crear cliente</button>
+        </div>
       </form>
-
-      {/* Botón para volver al menú */}
-      <Link href="/clientes">
-        <button>Volver al Menú</button>
-      </Link>
     </div>
   );
 }

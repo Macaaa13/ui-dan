@@ -1,14 +1,94 @@
-.botones {
+/*
+.botones_div {
   margin: 10px;
   padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.boton {
+  background-color: #1D4ED8;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 250px;
+  text-align: center;
+}
+
+.boton:hover {
+  background-color: #2563EB;
+}
+*/
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.card_inicio {
+  width: 300px; /* Aumenta el tamaño */
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: white; /* Fondo blanco */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para efecto elevado */
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card_inicio:hover {
+  transform: scale(1.05);
+}
+
+.card_inicio img {
+  width: 100%; /* Aumenta tamaño de la imagen */
+  height: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  background: white; /* Fondo blanco */
+  padding: 10px;
+  width: 100%;
+  border-top: 2px solid #ddd; /* Línea separadora con la tarjeta */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.title{
+  font-size: 36px;
+  font-weight: bold; 
+  text-align: center;
+  color: white;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
 }
 
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 6rem;
+  gap: 10px;
   min-height: 100vh;
 }
 

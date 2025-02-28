@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { buscarClientesPorFiltro } from '@/lib/clientes-api';
 import { obtenerObras, asignarClienteAObra } from '@/lib/obras-api';
+import styles from './page.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function ClientesBuscarPage() {
   const [filtros, setFiltros] = useState({
@@ -70,64 +73,72 @@ export default function ClientesBuscarPage() {
   };
 
   return (
-    <div>
-      <h1>Asignar obra</h1>
-
-      {/* Filtros */}
-      <div>
-        <label>
-          Nombre:
-          <input
-            type="text"
-            name="nombre"
-            value={filtros.nombre}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        <label>
-          Correo Electrónico:
-          <input
-            type="text"
-            name="correoElectronico"
-            value={filtros.correoElectronico}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        <label>
-          CUIT:
-          <input
-            type="text"
-            name="cuit"
-            value={filtros.cuit}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        <button onClick={handleBuscar}>Buscar</button>
-      </div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Asignar obra</h1>
 
       {/* Combo para seleccionar obra */}
-      <div>
-        <label>
-          Seleccionar Obra:
-          <select
+      <div className={styles.selectContainer}>
+        <label className={styles.label}>
+          Obra que se desea asignar
+          <select className={styles.input}
             value={obraSeleccionada}
             onChange={(e) => setObraSeleccionada(e.target.value)}
           >
             <option value="">Selecciona una obra</option>
             {obras.map((obra) => (
               <option key={obra.id} value={obra.id}>
-                {obra.nombre} (ID: {obra.id})
+                {`ID ${obra.id} - ${obra.direccion}`}
               </option>
             ))}
           </select>
         </label>
       </div>
 
+      {/* Filtros */}
+      <div className={styles.filtersContainer}>
+        <h3 className={styles.titleFiltrado}>Filtrado de Clientes</h3>
+        <hr className={styles.separator} />
+        <div className={styles.filters}>
+          <label className={styles.label}>
+            Nombre
+            <input
+              className={styles.input}
+              type="text"
+              name="nombre"
+              value={filtros.nombre}
+              onChange={handleInputChange}
+            />
+          </label>
+
+          <label className={styles.label}>
+            Correo Electrónico
+            <input
+              type="text"
+              name="correoElectronico"
+              value={filtros.correoElectronico}
+              onChange={handleInputChange}
+              className={styles.input}
+            />
+          </label>
+
+          <label className={styles.label}>
+            CUIT
+            <input
+              type="text"
+              name="cuit"
+              value={filtros.cuit}
+              onChange={handleInputChange}
+              className={styles.input}
+            />
+          </label>
+        </div>
+
+        <button onClick={handleBuscar} className={styles.button}>Buscar Clientes</button>
+
+      </div>
+
       {/* Tabla de resultados */}
-      <table>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
@@ -150,8 +161,8 @@ export default function ClientesBuscarPage() {
               <td>{cliente.maxObrasEjecucion}</td>
               <td>
                 {/* Botón para asignar obra */}
-                <button onClick={() => handleAsignarObra(cliente.id)}>
-                  Asignar Obra
+                <button onClick={() => handleAsignarObra(cliente.id)} className={styles.assignButton}>
+                  <FontAwesomeIcon icon={faClipboardCheck} />
                 </button>
               </td>
             </tr>
@@ -161,7 +172,7 @@ export default function ClientesBuscarPage() {
 
       {/* Botón para volver al menú */}
       <Link href="/clientes">
-        <button>Volver al Menú</button>
+        <button className={styles.backButton}>Volver al Menú</button>
       </Link>
     </div>
   );

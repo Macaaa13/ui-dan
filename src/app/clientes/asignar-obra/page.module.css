@@ -1,0 +1,161 @@
+.container { 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 900px;
+}
+
+.selectContainer{
+    width: 100%;
+}
+  
+.title {
+    font-size: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.filtersContainer {
+    border: 2px solid white;  
+    padding: 20px;            
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    display: flex;           
+    flex-direction: column;   
+    align-items: center;
+}
+
+.titleFiltrado {
+    font-size: 22px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.separator {
+    border-top: 2px solid white; 
+    width: 900px; 
+}
+  
+.filters {
+    margin-top: 20px;
+    width: 100%;
+}
+  
+.label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+  
+.input {
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    color: black;
+}
+  
+.button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+  
+.button:hover {
+    background-color: #0056b3;
+}
+  
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Tamaño de las columnas */
+.table th:nth-child(2) { width: 200px; } /* Nombre */
+.table th:nth-child(3) { width: 200px; } /* Correo */
+.table th:nth-child(5) { width: 50px; } /* Máximo descubierto */
+.table th:nth-child(6) { width: 50px; } /* Obras en ejecución */
+.table th:nth-child(7) { width: 100px; } /* Acciones */
+
+.table th,
+.table td {
+    border: 2px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+  
+.table th {
+    background-color: #f4f4f4;
+    color: black;
+}
+  
+.assignButton {
+    background-color: #00c4ff; /* Azul claro */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  /* Cambio de color al pasar el mouse */
+  .assignButton:hover {
+    background-color: #009ac7; /* Azul más oscuro */
+  }
+  
+  /* Tooltip */
+  .assignButton::after {
+    content: "Asignar Obra";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 120%; /* Muestra el texto arriba del botón */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+  
+  /* Mostrar el tooltip al pasar el mouse */
+  .assignButton:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }  
+  
+.backButton {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+  
+.backButton:hover {
+    background-color: #5a6268;
+}

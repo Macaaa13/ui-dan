@@ -1,25 +1,29 @@
 'use client';
 import Link from 'next/link';
-import styles from "./page.module.css";
+import styles from './page.module.css';
 
-export default function ClientesMenuPage() {
+export default function PedidosMenuPage() {
   return (
-    <div>
-      <h1>Menú de Pedidos</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link href="/pedidos/buscar">
-              <button className={styles.botones}>Buscar Pedidos</button>
-            </Link>
-          </li>
-          <li>
-            <Link href="/pedidos/nuevo">
-              <button className={styles.botones}>Crear Nuevo Pedido</button>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+    <div className={styles.container}>
+      {/* Encabezado con imagen de fondo */}
+      <div className={styles.titleContainer}>
+        <h1 className={styles.title}>Menú de Pedidos</h1>
+      </div>
+
+      {/* Contenedor de opciones */}
+      <div className={styles.submenuContainer}>
+        <Link href="/pedidos/buscar">
+          <div className={`${styles.submenuItem} ${styles.blue}`}>
+            <span>🔍</span> Buscar Pedidos
+          </div>
+        </Link>
+
+        <Link href="/pedidos/nuevo">
+          <div className={`${styles.submenuItem} ${styles.green}`}>
+            <span>➕</span> Crear Pedido
+          </div>
+        </Link>
+      </div>
     </div>
   );
 }

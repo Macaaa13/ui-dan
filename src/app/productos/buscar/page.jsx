@@ -2,6 +2,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { buscarProductosPorFiltro, eliminarProducto } from '@/lib/productos-api';
+import styles from './page.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProductosBuscarPage() {
   const [filtros, setFiltros] = useState({
@@ -14,7 +17,6 @@ export default function ProductosBuscarPage() {
   });
   const [results, setResults] = useState([]);
 
-  // Función para manejar cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFiltros({
@@ -23,10 +25,8 @@ export default function ProductosBuscarPage() {
     });
   };
 
-  // Función para realizar la búsqueda con los filtros
   const handleBuscar = async () => {
     try {
-      // Convertir los valores de los filtros a los tipos correctos
       const filtrosConvertidos = {
         id: filtros.id ? parseInt(filtros.id, 10) : null,
         nombre: filtros.nombre || null,
@@ -36,7 +36,6 @@ export default function ProductosBuscarPage() {
         stockMax: filtros.stockMax ? parseInt(filtros.stockMax, 10) : null,
       };
 
-      // Realizar la búsqueda
       const productosFiltrados = await buscarProductosPorFiltro(filtrosConvertidos);
       setResults(productosFiltrados);
     } catch (error) {
@@ -44,14 +43,12 @@ export default function ProductosBuscarPage() {
     }
   };
 
-  // Función para eliminar un producto
   const handleEliminar = async (id) => {
     const confirmacion = confirm(`¿Estás seguro de eliminar el producto con ID ${id}?`);
     if (confirmacion) {
       try {
-        await eliminarProducto(id); // Llama a la función de eliminación
+        await eliminarProducto(id);
         alert('Producto eliminado correctamente.');
-        // Actualizar la lista de resultados después de eliminar
         const nuevosResultados = results.filter(producto => producto.id !== id);
         setResults(nuevosResultados);
       } catch (error) {
@@ -61,7 +58,6 @@ export default function ProductosBuscarPage() {
     }
   };
 
-  // Cargar todos los productos al cargar el componente
   useEffect(() => {
     const fetchProductos = async () => {
       const lista = await buscarProductosPorFiltro({}); // Búsqueda sin filtros
@@ -72,76 +68,88 @@ export default function ProductosBuscarPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Buscar Productos</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Buscar Productos</h1>
 
       {/* Filtros */}
-      <div>
-        <label>
-          ID:
-          <input
-            type="number"
-            name="id"
-            value={filtros.id}
-            onChange={handleInputChange}
-          />
-        </label>
+      <div className={styles.filters}>
+        <div className={styles.filtersGroup}>
+          <div className={styles.filtersColumn}>
+            <label className={styles.label}>
+              ID
+              <input
+                type="number"
+                name="id"
+                value={filtros.id}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
 
-        <label>
-          Nombre:
-          <input
-            type="text"
-            name="nombre"
-            value={filtros.nombre}
-            onChange={handleInputChange}
-          />
-        </label>
+            <label className={styles.label}>
+              Precio Mínimo
+              <input
+                type="number"
+                name="precioMin"
+                value={filtros.precioMin}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
 
-        <label>
-          Precio Mínimo:
-          <input
-            type="number"
-            name="precioMin"
-            value={filtros.precioMin}
-            onChange={handleInputChange}
-          />
-        </label>
+            <label className={styles.label}>
+              Stock Mínimo
+              <input
+                type="number"
+                name="stockMin"
+                value={filtros.stockMin}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
+          </div>
 
-        <label>
-          Precio Máximo:
-          <input
-            type="number"
-            name="precioMax"
-            value={filtros.precioMax}
-            onChange={handleInputChange}
-          />
-        </label>
+          <div className={styles.filtersColumn}>
+          <label className={styles.label}>
+              Nombre
+              <input
+                type="text"
+                name="nombre"
+                value={filtros.nombre}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
 
-        <label>
-          Stock Mínimo:
-          <input
-            type="number"
-            name="stockMin"
-            value={filtros.stockMin}
-            onChange={handleInputChange}
-          />
-        </label>
+            <label className={styles.label}>
+              Precio Máximo
+              <input
+                type="number"
+                name="precioMax"
+                value={filtros.precioMax}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
 
-        <label>
-          Stock Máximo:
-          <input
-            type="number"
-            name="stockMax"
-            value={filtros.stockMax}
-            onChange={handleInputChange}
-          />
-        </label>
+            <label className={styles.label}>
+              Stock Máximo
+              <input
+                type="number"
+                name="stockMax"
+                value={filtros.stockMax}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </label>
+          </div>
+        </div>
 
-        <button onClick={handleBuscar}>Buscar</button>
+        <button onClick={handleBuscar} className={styles.button}>Buscar Productos</button>
       </div>
 
       {/* Tabla de resultados */}
-      <table>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
@@ -169,7 +177,9 @@ export default function ProductosBuscarPage() {
               <td>{producto.descuento}%</td>
               <td>{producto.categoria.nombre}</td>
               <td>
-                <button onClick={() => handleEliminar(producto.id)}>Eliminar</button>
+                <button onClick={() => handleEliminar(producto.id)} className={styles.deleteButton}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
               </td>
             </tr>
           ))}
@@ -178,7 +188,7 @@ export default function ProductosBuscarPage() {
 
       {/* Botón para volver al menú */}
       <Link href="/productos">
-        <button>Volver al Menú</button>
+        <button className={styles.backButton}>Volver al Menú</button>
       </Link>
     </div>
   );

@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { crearProducto } from '@/lib/productos-api';
 import { obtenerCategorias } from '@/lib/categorias-api';
-import Link from "next/link";
+import Link from 'next/link';
+import styles from './page.module.css'; // Importar los estilos
 
 export default function NewProductoPage() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function NewProductoPage() {
         const listaCategorias = await obtenerCategorias(); // Debe devolver [{ id: 1, nombre: 'Electrónica' }, ...]
         setCategorias(listaCategorias);
       } catch (error) {
-        console.error("Error al obtener categorías:", error);
+        console.error('Error al obtener categorías:', error);
       }
     }
     fetchCategorias();
@@ -37,95 +38,122 @@ export default function NewProductoPage() {
       await crearProducto(formData);
       router.push('/productos'); // Redirige al menú de productos
     } catch (error) {
-      console.error("Error al crear el producto:", error);
+      console.error('Error al crear el producto:', error);
     }
   };
 
   return (
-    <div>
-      <h1>Crear nuevo producto</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Crear nuevo producto</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={formData.nombre}
-          onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={formData.descripcion}
-          onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Stock Actual"
-          value={formData.stockActual}
-          onChange={(e) => setFormData({ ...formData, stockActual: parseInt(e.target.value) })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Stock Mínimo"
-          value={formData.stockMinimo}
-          onChange={(e) => setFormData({ ...formData, stockMinimo: parseInt(e.target.value) })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Precio"
-          value={formData.precio}
-          onChange={(e) => setFormData({ ...formData, precio: parseFloat(e.target.value) })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Descuento"
-          value={formData.descuento}
-          onChange={(e) => setFormData({ ...formData, descuento: parseInt(e.target.value) })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="ID de Categoría"
-          value={formData.categoria.id}
-          onChange={(e) => setFormData({ ...formData, categoria: { ...formData.categoria, id: parseInt(e.target.value) } })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nombre de Categoría"
-          value={formData.categoria.nombre}
-          onChange={(e) => setFormData({ ...formData, categoria: { ...formData.categoria, nombre: e.target.value } })}
-          required
-        />
-         {/* Combo de selección de categoría */}
-         <select
-          value={formData.categoria.id}
-          onChange={(e) => {
-            const selectedCategoria = categorias.find(cat => cat.id === parseInt(e.target.value));
-            setFormData({
-              ...formData,
-              categoria: selectedCategoria || { id: '', nombre: '' }
-            });
-          }}
-          required
-        >
-          <option value="">Selecciona una categoría</option>
-          {categorias.map(cat => (
-            <option key={cat.id} value={cat.id}>
-              {cat.nombre}
-            </option>
-          ))}
-        </select>
+        {/* Campo: Nombre */}
+        <div className={styles.form}>
+          <div className={styles.formGroup}>
+            <div className={styles.formColumn}>
+              <label className={styles.label}>Nombre</label>
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.nombre}
+                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                className={styles.input}
+                required
+              />
+            </div>
 
-        <button type="submit">Crear producto</button>
+            <div className={styles.formColumn}>
+              <label className={styles.label}>Categoría</label>
+              <select
+                value={formData.categoria.id}
+                onChange={(e) => {
+                  const selectedCategoria = categorias.find(cat => cat.id === parseInt(e.target.value));
+                  setFormData({
+                    ...formData,
+                    categoria: selectedCategoria || { id: '', nombre: '' },
+                  });
+                }}
+                className={styles.input}
+                required
+              >
+                <option value="">Selecciona una categoría</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.formDescripcion}>
+            <label className={styles.label}>Descripción</label>
+            <input
+              type="text"
+              placeholder="Descripción"
+              value={formData.descripcion}
+              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
+              className={styles.input}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <div className={styles.formColumn}>
+              <label className={styles.label}>Stock Actual</label>
+              <input
+                type="number"
+                placeholder="Stock Actual"
+                value={formData.stockActual}
+                onChange={(e) => setFormData({ ...formData, stockActual: parseInt(e.target.value) })}
+                className={styles.input}
+                required
+              />
+
+              <label className={styles.label}>Precio</label>
+              <input
+                type="number"
+                placeholder="Precio"
+                value={formData.precio}
+                onChange={(e) => setFormData({ ...formData, precio: parseFloat(e.target.value) })}
+                className={styles.input}
+                required
+              />
+            </div>
+
+            <div className={styles.formColumn}>
+              <label className={styles.label}>Stock Mínimo</label>
+              <input
+                type="number"
+                placeholder="Stock Mínimo"
+                value={formData.stockMinimo}
+                onChange={(e) => setFormData({ ...formData, stockMinimo: parseInt(e.target.value) })}
+                className={styles.input}
+                required
+              />
+
+              <label className={styles.label}>Descuento</label>
+              <input
+                type="number"
+                placeholder="Descuento"
+                value={formData.descuento}
+                onChange={(e) => setFormData({ ...formData, descuento: parseInt(e.target.value) })}
+                className={styles.input}
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Botones */}
+        <div className={styles.buttonsContainer}>
+          <Link href="/productos">
+            <button className={styles.backButton}>Volver al Menú</button>
+          </Link>
+          <button type="submit" className={styles.createButton}>
+            Crear producto
+          </button>
+        </div>
       </form>
-      <Link href="/productos">
-        <button>Volver al Menú</button>
-      </Link>
     </div>
   );
 }
