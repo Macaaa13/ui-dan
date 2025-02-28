@@ -119,8 +119,8 @@ export default function ClientesBuscarPage() {
             <option value="">Selecciona una obra</option>
             {obras.map((obra) => (
               <option key={obra.id} value={obra.id}>
-                {obra.nombre} (ID: {obra.id})
-              </option>
+                {`Id: ${obra.id} - Dirrección: ${obra.direccion} - Cliente: ${obra.cliente.nombre}`}
+                </option>
             ))}
           </select>
         </label>
