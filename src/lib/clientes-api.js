@@ -1,4 +1,9 @@
+// Llamada directa al ms
 const API_URL = 'http://localhost:6080/api/clientes';
+
+// Llamada al haproxy
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+//const API_URL = `${API_BASE_URL}/clientes/api/clientes`;
 
 // Obtener todos los clientes
 async function obtenerClientes() {
@@ -14,30 +19,6 @@ async function obtenerClientes() {
         throw error;
     }
 }
-
-// Obtener usuarios habilitados de un cliente
-async function obtenerUsuariosHabilitadosPorCliente(idCliente) {
-    const apiUrl = `${API_URL}/${idCliente}/usuarios-habilitados`;
-    console.log('Buscando usuarios habilitados para el cliente en: ', apiUrl);
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        // Verificar si la respuesta contiene usuarios habilitados
-        if (Array.isArray(data) && data.length === 0) {
-            return [];  // Si no hay usuarios, devolver un arreglo vacío
-        }
-
-        return data;  // Devolver la lista de usuarios habilitados
-    } catch (error) {
-        console.error("Error al obtener los usuarios habilitados:", error);
-        return [];  // En caso de error, devolver un arreglo vacío
-    }
-}
-
 
 async function buscarClientesPorFiltro(filtros) {
     const { nombre, correoElectronico, cuit } = filtros;
@@ -173,6 +154,5 @@ export {
     crearCliente,
     actualizarCliente,
     agregarUsuariosHabilitados,
-    eliminarCliente,
-    obtenerUsuariosHabilitadosPorCliente
+    eliminarCliente
 };

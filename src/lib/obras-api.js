@@ -1,4 +1,9 @@
+// Llamada directa al ms
 const API_URL = 'http://localhost:6080/api/obras';
+
+// Llamada al haproxy
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+//const API_URL = `${API_BASE_URL}/clientes/api/obras`;
 
 // Buscar obra por Id
 async function buscarObra(id, limit, offset = 0) {
@@ -16,40 +21,6 @@ async function buscarObra(id, limit, offset = 0) {
       return [];
     }
   }
-
-  // Buscar obras de un cliente particular
-  async function buscarObrasPorCliente(idCliente, limit = 10, offset = 0) {
-    const url = new URL(`${API_URL}/cliente/${idCliente}`);
-    // Opcional: añadir los parámetros 'limit' y 'offset' solo si se necesitan en el backend
-    url.searchParams.append('limit', limit);
-    url.searchParams.append('offset', offset);
-
-    console.log('Buscando obras del cliente en:', url.toString());
-
-    try {
-        const response = await fetch(url);
-        
-        // Si la respuesta no es ok, lanzar un error con el estado HTTP
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // Si el contenido de la respuesta es vacío (sin obras), manejarlo apropiadamente
-        const data = await response.json();
-        
-        // Verificar si hay datos
-        if (!data || data.length === 0) {
-            console.log("No se encontraron obras para este cliente.");
-            return [];
-        }
-
-        console.log("Obras obtenidas:", data); // Agregar un log para ver la respuesta
-        return data;  // Devuelve las obras obtenidas
-    } catch (error) {
-        console.error("Error al obtener las obras del cliente:", error);
-        throw error;  // Propaga el error al llamante para que lo maneje
-    }
-}
   
 // Crear un obra
 async function crearObra(obra) {
@@ -157,6 +128,5 @@ export {
     obtenerObras,
     eliminarObra,
     actualizarObra,
-    asignarClienteAObra,
-    buscarObrasPorCliente
+    asignarClienteAObra
 };
