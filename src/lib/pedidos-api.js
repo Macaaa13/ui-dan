@@ -38,9 +38,9 @@ async function buscarPedidosPorFiltro(filtros) {
     }
 }
 
-// Obtener un pedido por ID
-async function obtenerPedidoPorId(id) {
-    const apiUrl = `${API_URL}/${id}`;
+// Obtener un pedido por numeroPedido
+async function obtenerPedidoPorId(numeroPedido) {
+    const apiUrl = `${API_URL}/${numeroPedido}`;
     console.log('Buscando pedido en: ', apiUrl);
     try {
         const response = await fetch(apiUrl);

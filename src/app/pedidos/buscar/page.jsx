@@ -101,14 +101,14 @@ export default function BuscarPedidosPage() {
               {resultados.map((pedido) => (
                 <tr key={pedido.id}>
                   <td>
-                    <Link href={`/pedidos/${pedido.id}`}>
+                    <Link href={`/pedidos/${pedido.numeroPedido}`}>
                       {pedido.numeroPedido}
                     </Link>
                   </td>
                   <td>{pedido.cliente.nombre}</td>
                   <td>{pedido.estado}</td>
                   <td>
-                    <button onClick={() => handleActualizarEstado(pedido.id)}>
+                    <button onClick={() => handleActualizarEstado(pedido.numeroPedido)}>
                       Actualizar Estado
                     </button>
                   </td>
