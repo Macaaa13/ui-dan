@@ -6,7 +6,7 @@ import { obtenerPedidoPorId, actualizarEstadoPedido } from '@/lib/pedidos-api';
 export default function ActualizarEstadoPage() {
   const router = useRouter();
   const params = useParams();
-  const pedidoId = params.pedidoId;
+  const numeroPedido = params.numeroPedido;
 
   const [pedido, setPedido] = useState(null);
   const [nuevoEstado, setNuevoEstado] = useState('');
@@ -15,7 +15,7 @@ export default function ActualizarEstadoPage() {
   useEffect(() => {
     const fetchPedido = async () => {
       try {
-        const pedido = await obtenerPedidoPorId(pedidoId);
+        const pedido = await obtenerPedidoPorId(numeroPedido);
         setPedido(pedido);
         setNuevoEstado(pedido.estado); // Establecer el estado actual
       } catch (error) {
@@ -24,14 +24,15 @@ export default function ActualizarEstadoPage() {
     };
 
     fetchPedido();
-  }, [pedidoId]);
+  }, [numeroPedido]);
 
   // Función para actualizar el estado del pedido
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await actualizarEstadoPedido(pedidoId, { estado: nuevoEstado });
-      router.push(`/pedidos/${pedidoId}`); // Redirigir a la página de detalles del pedido
+      console.log('Actualizacion. Numero de pedido: %d . Estado: %s', numeroPedido, nuevoEstado);
+      await actualizarEstadoPedido(numeroPedido, { estado: nuevoEstado });
+      router.push(`/pedidos/${numeroPedido}`); // Redirigir a la página de detalles del pedido
     } catch (error) {
       console.error('Error al actualizar el estado del pedido:', error);
     }
@@ -67,7 +68,7 @@ export default function ActualizarEstadoPage() {
       </form>
 
       {/* Botón para volver a los detalles del pedido */}
-      <button onClick={() => router.push(`/pedidos/${pedidoId}`)}>
+      <button onClick={() => router.push(`/pedidos`)}>
         Volver al Detalle del Pedido
       </button>
     </div>

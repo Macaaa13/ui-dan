@@ -2,9 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { buscarPedidosPorFiltro } from '@/lib/pedidos-api';
-import { obtenerClientes } from '@/lib/clientes-api';
+import { obtenerClientes } from '@/lib/clientes-api'; // Importa obtenerClientes desde clientes-api
 import Link from 'next/link';
-import styles from './page.module.css';  // Importar los estilos
 
 export default function BuscarPedidosPage() {
   const router = useRouter();
@@ -13,12 +12,13 @@ export default function BuscarPedidosPage() {
     estado: '',
   });
   const [resultados, setResultados] = useState([]);
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState([]); // Estado para almacenar la lista de clientes
 
+  // Cargar clientes al iniciar la página
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const clientesData = await obtenerClientes();
+        const clientesData = await obtenerClientes(); // Usa obtenerClientes de clientes-api
         setClientes(clientesData);
       } catch (error) {
         console.error('Error al obtener clientes:', error);
@@ -38,20 +38,21 @@ export default function BuscarPedidosPage() {
     }
   };
 
+  // Función para redirigir a la vista de actualización del estado
   const handleActualizarEstado = (pedidoId) => {
     router.push(`/pedidos/${pedidoId}/actualizar-estado`);
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Buscar Pedidos</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Cliente:</label>
+    <div>
+      <h1>Buscar Pedidos</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Combo desplegable para seleccionar cliente */}
+        <div>
+          <label>Cliente:</label>
           <select
             value={filtros.clienteId}
             onChange={(e) => setFiltros({ ...filtros, clienteId: e.target.value })}
-            className={styles.select}
           >
             <option value="">Seleccione un cliente</option>
             {clientes.map((cliente) => (
@@ -62,12 +63,12 @@ export default function BuscarPedidosPage() {
           </select>
         </div>
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Estado:</label>
+        {/* Combo desplegable para seleccionar estado */}
+        <div>
+          <label>Estado:</label>
           <select
             value={filtros.estado}
             onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })}
-            className={styles.select}
           >
             <option value="">Seleccione un estado</option>
             <option value="RECIBIDO">Recibido</option>
@@ -79,13 +80,15 @@ export default function BuscarPedidosPage() {
           </select>
         </div>
 
-        <button type="submit" className={styles.button}>Buscar</button>
+        {/* Botón para buscar */}
+        <button type="submit">Buscar</button>
       </form>
 
-      <div className={styles.resultados}>
+      {/* Mostrar resultados de la búsqueda */}
+      <div>
         <h2>Resultados de la búsqueda:</h2>
         {resultados.length > 0 ? (
-          <table className={styles.table}>
+          <table>
             <thead>
               <tr>
                 <th>Número de Pedido</th>
@@ -98,14 +101,14 @@ export default function BuscarPedidosPage() {
               {resultados.map((pedido) => (
                 <tr key={pedido.id}>
                   <td>
-                    <Link href={`/pedidos/${pedido.id}`} className={styles.link}>
+                    <Link href={`/pedidos/${pedido.numeroPedido}`}>
                       {pedido.numeroPedido}
                     </Link>
                   </td>
                   <td>{pedido.cliente.nombre}</td>
                   <td>{pedido.estado}</td>
                   <td>
-                    <button onClick={() => handleActualizarEstado(pedido.id)} className={styles.button}>
+                    <button onClick={() => handleActualizarEstado(pedido.numeroPedido)}>
                       Actualizar Estado
                     </button>
                   </td>
@@ -118,8 +121,9 @@ export default function BuscarPedidosPage() {
         )}
       </div>
 
+      {/* Botón para volver al menú */}
       <Link href="/pedidos">
-        <button className={styles.backButton}>Volver al Menú</button>
+        <button>Volver al Menú</button>
       </Link>
     </div>
   );
