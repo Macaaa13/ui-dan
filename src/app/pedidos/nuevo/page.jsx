@@ -1,231 +1,332 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { crearPedido } from '@/lib/pedidos-api'; 
-import { obtenerObras } from '@/lib/obras-api'; 
-import { obtenerClientes } from '@/lib/clientes-api'; 
-import Link from 'next/link';
-import styles from './page.module.css';  // Importar los estilos
+import { obtenerUsuariosHabilitadosPorCliente } from "@/lib/clientes-api";  
+import { buscarObrasPorCliente } from "@/lib/obras-api";
+import { obtenerClientes } from "@/lib/clientes-api";  
+import { obtenerProductos } from "@/lib/productos-api"; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';  // Importar Link para navegación
+import styles from "./page.module.css";
 
-export default function NewPedidoPage() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    fecha: new Date().toISOString(),
-    numeroPedido: '',
-    usuario: '',
-    observaciones: '',
-    cliente: { id: '', nombre: '' }, // Cliente asociado al pedido
-    obra: { id: '', nombre: '' },    // Obra asociada al pedido
-    detalle: [],                     // Lista de detalles del pedido
-    total: 0,                        // Total del pedido
-  });
+export default function Page() {
+    const [clientes, setClientes] = useState([]);  
+    const [clienteId, setClienteId] = useState("");  
+    const [obras, setObras] = useState([]);  
+    const [usuarios, setUsuarios] = useState([]);  
+    const [obraId, setObraId] = useState("");  
+    const [usuarioId, setUsuarioId] = useState("");  
+    const [loading, setLoading] = useState(false);  
+    const [error, setError] = useState(null);  
+    const [observaciones, setObservaciones] = useState("");
+    const [productos, setProductos] = useState([]); // Lista de productos
+    const [productoId, setProductoId] = useState(""); // Producto seleccionado
+    const [cantidad, setCantidad] = useState(1); // Cantidad por defecto
+    const [detallesPedido, setDetallesPedido] = useState([]);
 
-  const [clientes, setClientes] = useState([]); // Lista de clientes
-  const [obras, setObras] = useState([]);       // Lista de obras
+    // Cargar clientes desde la API
+    useEffect(() => {
+        const obtenerClientesData = async () => {
+            setLoading(true);
+            try {
+                const clientesData = await obtenerClientes();  
+                setClientes(clientesData);
+            } catch (error) {
+                setError("Error al cargar los clientes.");
+                console.error("Error al cargar los clientes:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        obtenerClientesData();
+    }, []);  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const clientesData = await obtenerClientes(); // Obtener clientes
-        setClientes(clientesData);
+    // Cargar las obras asociadas a un cliente seleccionado
+    useEffect(() => {
+        if (clienteId) {
+            const cargarObras = async () => {
+                setLoading(true);
+                try {
+                    const obrasData = await buscarObrasPorCliente(clienteId);
+                    setObras(obrasData);
+                    setObraId(""); 
+                } catch (error) {
+                    setError("Error al cargar las obras.");
+                    console.error("Error al cargar las obras:", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            cargarObras();
+        } else {
+            setObras([]);  
+            setObraId("");  
+        }
+    }, [clienteId]);  
 
-        const obrasData = await obtenerObras(); // Obtener obras
-        setObras(obrasData);
-      } catch (error) {
-        console.error('Error al obtener datos:', error);
-      }
+    // Cargar los usuarios habilitados asociados a un cliente seleccionado
+    useEffect(() => {
+        if (clienteId) {
+            const cargarUsuarios = async () => {
+                setLoading(true);
+                setError(null); 
+                try {
+                    const response = await obtenerUsuariosHabilitadosPorCliente(clienteId);
+                    if (response && Array.isArray(response) && response.length > 0) {
+                        setUsuarios(response);  
+                    } else {
+                        setUsuarios([]);  
+                    }
+                    setUsuarioId(""); 
+                } catch (error) {
+                    setError("No se pudieron obtener los usuarios habilitados.");
+                    console.error("Error al cargar los usuarios habilitados:", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            cargarUsuarios();
+        } else {
+            setUsuarios([]);  
+            setUsuarioId("");  
+        }
+    }, [clienteId]);  
+
+    // Limpiar los selects cuando el cliente cambia
+    useEffect(() => {
+        setObraId("");
+        setUsuarioId("");
+        setObras([]);
+        setUsuarios([]);
+    }, [clienteId]);
+
+    // Obtener productos
+    useEffect(() => {
+        const obtenerProductosData = async () => {
+            setLoading(true);
+            try {
+                const data = await obtenerProductos();
+                setProductos(data); // Guardar los productos obtenidos
+            } catch (error) {
+                console.error("Error al obtener productos:", error);
+                setError("Hubo un error al obtener los productos.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        obtenerProductosData();
+    }, []);
+
+    const handleAddDetalle = () => {
+        if (!productoId || cantidad <= 0) { // Corregido: verificar `productoId` en lugar de `producto`
+            setError("Por favor, selecciona un producto y una cantidad válida.");
+            return;
+        }
+    
+        const selectedProducto = productos.find(p => p.id === Number(productoId));
+        if (!selectedProducto) {
+            setError("El producto seleccionado no es válido.");
+            return;
+        }
+    
+        setDetallesPedido(prev => [
+            ...prev,
+            { productoId, cantidad }
+        ]);
+    
+        setProductoId("");
+        setCantidad(1);
+        setError(""); // Limpiar error si todo sale bien
     };
 
-    fetchData();
-  }, []);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await crearPedido(formData); // Envía el pedido al backend
-      router.push('/pedidos');    // Redirige a la lista de pedidos
-    } catch (error) {
-      console.error('Error al crear el pedido:', error);
-    }
-  };
+        if (!clienteId || !obraId || detallesPedido.length === 0) {
+            setError("Los campos Cliente, Obra y al menos un Detalle de Pedido son obligatorios.");
+            console.log("Error: Falta completar campos");
+            return;
+        }
+    
+        // Crear el objeto del pedido
+        const pedido = {
+            clienteId,
+            productos: detallesPedido.map(detalle => ({
+            productoId: detalle.productoId,
+            cantidad: detalle.cantidad
+            })),
+            total: calcularTotal(),  // Aquí deberías agregar tu lógica para calcular el total
+            estado: "pendiente",  // Puedes cambiar esto según tu flujo
+        };
+    
+        try {
+          // Crear el pedido a través de la API
+          await crearPedido(pedido);
+          router.push('/pedidos'); // Redirige al menú de pedidos
+        } catch (error) {
+          console.error('Error al crear el pedido:', error);
+        }
+      }
 
-  const agregarDetalle = () => {
-    setFormData({
-      ...formData,
-      detalle: [...formData.detalle, { producto: '', cantidad: 0, precioUnitario: 0 }],
-    });
-  };
+    // Eliminar detalle de pedido
+    const eliminarDetalle = (index) => {
+        const nuevosDetalles = [...detallesPedido];
+        nuevosDetalles.splice(index, 1);  // Elimina el detalle en el índice proporcionado
+        setDetallesPedido(nuevosDetalles); // Actualiza el estado con los nuevos detalles
+    };
 
-  const actualizarDetalle = (index, campo, valor) => {
-    const nuevosDetalles = [...formData.detalle];
-    nuevosDetalles[index][campo] = valor;
-    setFormData({ ...formData, detalle: nuevosDetalles });
-  };
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.title}>Crear Pedido</h1>
 
-  const handleClienteChange = (e) => {
-    const clienteId = e.target.value;
-    const clienteSeleccionado = clientes.find((cliente) => cliente.id === clienteId);
-  
-    if (clienteSeleccionado) {
-      setFormData({
-        ...formData,
-        cliente: { id: clienteId, nombre: clienteSeleccionado.nombre },
-      });
-    } else {
-      setFormData({
-        ...formData,
-        cliente: { id: '', nombre: '' },
-      });
-    }
-  };
+            <form onSubmit={handleSubmit}>
+                <label className={styles.label}>Cliente</label>
+                <select
+                    value={clienteId}
+                    onChange={(e) => setClienteId(e.target.value)}
+                    className={styles.select}
+                >
+                    <option value="">Seleccionar Cliente</option>
+                    {loading ? (
+                        <option>Cargando clientes...</option>
+                    ) : (
+                        clientes.map(cliente => (
+                            <option key={cliente.id} value={cliente.id}>
+                                {cliente.nombre}
+                            </option>
+                        ))
+                    )}
+                </select>
 
-  const handleObraChange = (e) => {
-    const obraId = e.target.value;
-    const obraSeleccionada = obras.find((obra) => obra.id === obraId);
-  
-    if (obraSeleccionada) {
-      setFormData({
-        ...formData,
-        obra: { id: obraId, nombre: obraSeleccionada.nombre },
-      });
-    } else {
-      setFormData({
-        ...formData,
-        obra: { id: '', nombre: '' },
-      });
-    }
-  };
+                <div>
+                    <label className={styles.label}>Obra</label>
+                    <select
+                        value={obraId}
+                        onChange={(e) => setObraId(e.target.value)}
+                        className={styles.select}
+                        disabled={!clienteId}
+                    >
+                        <option value="">Seleccionar Obra</option>
+                        {loading && !obras.length && <option>Cargando obras...</option>}
+                        {obras.length > 0 ? (
+                            obras.map(obra => (
+                                <option key={obra.id} value={obra.id}>
+                                    {obra.direccion}
+                                </option>
+                            ))
+                        ) : (
+                            <option>No hay obras disponibles</option>
+                        )}
+                    </select>
 
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Crear nuevo pedido</h1>
-      <form onSubmit={handleSubmit} className={styles.form}> {/* Aplicamos .form aquí */}
-        {/* Campo: Número de Pedido */}
-        <div className={styles.formGroup}>
-          <input
-            type="text"
-            placeholder="Número de Pedido"
-            value={formData.numeroPedido}
-            onChange={(e) => setFormData({ ...formData, numeroPedido: e.target.value })}
-            className={styles.input}
-            required
-          />
+                    <label className={styles.label}>Usuario</label>
+                    <select
+                        value={usuarioId}
+                        onChange={(e) => setUsuarioId(e.target.value)}
+                        className={styles.select}
+                        disabled={!clienteId}
+                    >
+                        <option value="">Seleccionar Usuario</option>
+                        {loading && !usuarios.length && <option>Cargando usuarios habilitados...</option>}
+                        {error && <option>{error}</option>}
+                        {usuarios.length > 0 ? (
+                            usuarios.map(usuario => (
+                                <option key={usuario.id} value={usuario.id}>
+                                    {usuario.nombre} {usuario.apellido}
+                                </option>
+                            ))
+                        ) : (
+                            <option>No hay usuarios habilitados</option>
+                        )}
+                    </select>
+                </div>
+
+                <div>
+                    <label className={styles.label}>Observaciones</label>
+                    <input
+                        type="text"
+                        placeholder="Ingrese observaciones"
+                        value={observaciones}
+                        onChange={(e) => setObservaciones(e.target.value)}
+                        className={styles.input}
+                    />
+                </div>
+
+                {/* Detalles del pedido (productos y cantidades) */}
+                <div>
+                    <h2 className={styles.subtitle}>Detalles del Pedido</h2>
+                    <div className={styles.detallePedido}>
+                        <label className={styles.label}>Producto</label>
+                        <select
+                            value={productoId}
+                            onChange={(e) => setProductoId(e.target.value)}
+                            className={styles.select}
+                        >
+                            <option value="">Seleccionar Producto</option>
+                            {productos.map((producto) => (
+                                <option key={producto.id} value={producto.id}>
+                                    {producto.nombre} - ${producto.precio}
+                                </option>
+                            ))}
+                        </select>
+                        <label className={styles.label}>Cantidad</label>
+                        <input
+                            type="number"
+                            value={cantidad}
+                            onChange={(e) => setCantidad(e.target.value)}
+                            className={styles.input}
+                            min="1"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAddDetalle}
+                            className={styles.createButton}
+                        >
+                            Agregar Producto
+                        </button>
+                    </div>
+                    {detallesPedido.length === 0 ? (
+                        <p className={styles.detallesTable}>No hay productos agregados al pedido.</p>
+                    ) : (
+                        <table className={styles.detallesTable}>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {detallesPedido.map((detalle, index) => (
+                                    <tr key={index}>
+                                        <td>{detalle.nombreProducto}</td>
+                                        <td>{detalle.cantidad}</td>
+                                        <td>
+                                            <button
+                                                className={styles.deleteButton}
+                                                onClick={() => eliminarDetalle(index)}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+
+                <div className={styles.buttonsContainer}>
+                    <Link href="/pedidos">
+                        <button type="button" className={styles.backButton}>
+                            Volver al Menú
+                        </button>
+                    </Link>
+                    <button type="submit" className={styles.createButton}>
+                        Crear Pedido
+                    </button>
+                </div>
+            </form>
         </div>
-
-        {/* Campo: Usuario */}
-        <div className={styles.formGroup}>
-          <input
-            type="text"
-            placeholder="Usuario"
-            value={formData.usuario}
-            onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
-            className={styles.input}
-            required
-          />
-        </div>
-
-        {/* Campo: Observaciones */}
-        <div className={styles.formGroup}>
-          <textarea
-            placeholder="Observaciones"
-            value={formData.observaciones}
-            onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
-            className={`${styles.input} ${styles.textarea}`}
-          />
-        </div>
-
-        {/* Campo: Cliente */}
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Cliente:</label>
-          <select
-            value={formData.cliente.id}
-            onChange={handleClienteChange}
-            className={styles.input}
-            required
-          >
-            <option value="">Seleccione un cliente</option>
-            {clientes.map((cliente) => (
-              <option key={cliente.id} value={cliente.id}>
-                {cliente.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Campo: Obra */}
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Obra:</label>
-          <select
-            value={formData.obra.id}
-            onChange={handleObraChange}
-            className={styles.input}
-            required
-          >
-            <option value="">Seleccione una obra</option>
-            {obras.map((obra) => (
-              <option key={obra.id} value={obra.id}>
-                {obra.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Detalles del Pedido */}
-        <div className={styles.detailsContainer}>
-          <h3>Detalles del Pedido</h3>
-          {formData.detalle.map((detalle, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                placeholder="Producto"
-                value={detalle.producto}
-                onChange={(e) => actualizarDetalle(index, 'producto', e.target.value)}
-                className={styles.input}
-                required
-              />
-              <input
-                type="number"
-                placeholder="Cantidad"
-                value={detalle.cantidad}
-                onChange={(e) => actualizarDetalle(index, 'cantidad', parseInt(e.target.value))}
-                className={styles.input}
-                required
-              />
-              <input
-                type="number"
-                placeholder="Precio Unitario"
-                value={detalle.precioUnitario}
-                onChange={(e) => actualizarDetalle(index, 'precioUnitario', parseFloat(e.target.value))}
-                className={styles.input}
-                required
-              />
-            </div>
-          ))}
-          <button type="button" onClick={agregarDetalle} className={styles.submitButton}>
-            Agregar detalle
-          </button>
-        </div>
-
-        {/* Total */}
-        <div className={styles.totalInput}>
-          <input
-            type="number"
-            value={formData.total}
-            onChange={(e) => setFormData({ ...formData, total: parseFloat(e.target.value) })}
-            className={styles.input}
-            placeholder="Total"
-            required
-          />
-        </div>
-
-        {/* Botones de envío */}
-        <div className={styles.buttonsContainer}>
-          <button type="submit" className={styles.submitButton}>Crear Pedido</button>
-          <Link href="/pedidos" passHref>
-            <button type="button" className={styles.backButton}>Volver</button>
-          </Link>
-        </div>
-      </form>
-    </div>
-  );
+    );
 }

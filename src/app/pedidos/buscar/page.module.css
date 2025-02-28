@@ -1,99 +1,166 @@
 .container {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 900px;
-  }
-  
-  .title {
-    font-size: 30px;
-    margin-bottom: 15px;
-    text-align: center;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .form {
-    width: 100%;
-  }
-  
-  .formGroup {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .label {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  .select {
-    padding: 8px;
-    font-size: 16px;
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-  
-  .button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  .resultados {
-    margin-top: 20px;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .table th, .table td {
-    border: 2px solid #ddd;
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-  }
-  
-  .table th {
-    background-color: #f4f4f4;
-  }
-  
-  .link {
-    text-decoration: none;
-    color: #007BFF;
-  }
-  
-  .link:hover {
-    color: #0056b3;
-  }
-  
-  .backButton {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  .backButton:hover {
-    background-color: #218838;
-  }
-  
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 900px;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.divResultados{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleResultados {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.filtersGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.label {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  color: black;
+}
+
+.button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.table {
+  width: 900px;
+  border-collapse: collapse;
+  margin-top: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  border: 2px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  color: black;
+}
+
+/* Tamaño de las columnas */
+.table th:nth-child(1) { width: 100px; } /* Número de Pedido */
+.table th:nth-child(2) { width: 300px; } /* Cliente */
+.table th:nth-child(3) { width: 300px; } /* Cliente */
+
+.actionButton {
+  background-color: #ffeb3b; /* Color de fondo amarillo para el botón editar */
+  color: black;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.updateButton {
+  position: relative;
+  padding: 5px 10px;
+  background-color: #ffeb3b; /* Color de fondo verde para el botón actualizar */
+  color: black; /* Color del texto */
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-right: 5px;
+}
+
+.updateButton:hover {
+  background-color: #fdd835; /* Fondo más oscuro para el hover */
+}
+
+.updateButton::after {
+  content: "Actualizar Estado";
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 120%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+/* Mostrar el tooltip al pasar el mouse */
+.updateButton:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.deleteButton {
+  background-color: #dc3545; /* Color de fondo rojo para el botón eliminar */
+  color: white;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.backButton {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.backButton:hover {
+  background-color: #5a6268;
+}
