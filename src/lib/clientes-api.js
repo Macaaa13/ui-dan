@@ -15,6 +15,30 @@ async function obtenerClientes() {
     }
 }
 
+// Obtener usuarios habilitados de un cliente
+async function obtenerUsuariosHabilitadosPorCliente(idCliente) {
+    const apiUrl = `${API_URL}/${idCliente}/usuarios-habilitados`;
+    console.log('Buscando usuarios habilitados para el cliente en: ', apiUrl);
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Verificar si la respuesta contiene usuarios habilitados
+        if (Array.isArray(data) && data.length === 0) {
+            return [];  // Si no hay usuarios, devolver un arreglo vacío
+        }
+
+        return data;  // Devolver la lista de usuarios habilitados
+    } catch (error) {
+        console.error("Error al obtener los usuarios habilitados:", error);
+        return [];  // En caso de error, devolver un arreglo vacío
+    }
+}
+
+
 async function buscarClientesPorFiltro(filtros) {
     const { nombre, correoElectronico, cuit } = filtros;
 
@@ -149,5 +173,6 @@ export {
     crearCliente,
     actualizarCliente,
     agregarUsuariosHabilitados,
-    eliminarCliente
+    eliminarCliente,
+    obtenerUsuariosHabilitadosPorCliente
 };

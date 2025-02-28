@@ -1,113 +1,210 @@
-/* page.module.css */
-
-/* Contenedor principal */
 .container {
-  max-width: 800px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
+  width: 900px;
+  margin: 0 auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Título principal */
 .title {
-  text-align: center;
-  font-size: 2rem;
+  font-size: 30px;
+  font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
+  color: black;
 }
 
-/* Estilo para el formulario */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Estilos para cada grupo de campos en el formulario */
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Estilo de los campos de entrada (input y textarea) */
-.input {
-  padding: 12px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  outline: none;
-  transition: border 0.3s ease;
-}
-
-.input:focus {
-  border-color: #4CAF50;
-}
-
-/* Estilo para el área de texto (textarea) */
-.textarea {
-  resize: vertical;
-  height: 100px;
-}
-
-/* Estilo para los botones */
-.submitButton,
-.backButton {
-  padding: 12px 24px;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.submitButton {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.submitButton:hover {
-  background-color: #45a049;
-}
-
-.backButton {
-  background-color: #f44336;
-  color: white;
-}
-
-.backButton:hover {
-  background-color: #e53935;
-}
-
-/* Contenedor de detalles del pedido */
-.detailsContainer {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-/* Estilo para los campos de detalles del pedido */
-.detailsContainer input {
-  margin: 5px 0;
-}
-
-/* Estilos para la sección de total */
-.totalInput {
+.subtitle {
+  font-size: 20px;
+  font-weight: bold;
   margin-top: 20px;
+  color: black;
 }
 
-/* Estilo de los botones dentro del formulario */
+.form {
+  width: 900px;
+}
+
+.label {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+  display: block;
+  color:black;
+  width: 800px;
+}
+
+.select,
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  color:black;
+}
+
+.select:focus,
+.input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.select:disabled,
+.input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
 .buttonsContainer {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 
-/* Estilo de las etiquetas */
-.label {
-  font-weight: bold;
+.backButton,
+.createButton {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.backButton:hover {
+  background-color: #5a6268;
+}
+
+.createButton {
+  background-color: #28a745;
+  border: none;
+  color: white;
+}
+
+.createButton:hover {
+  background-color: #218838;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.detailsContainer {
+  margin-top: 20px;
+}
+
+.detailsContainer button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.detailsContainer button:hover {
+  background-color: #0056b3;
+}
+
+.detailsContainer div {
+  margin-top: 5px;
+  font-size: 0.9rem;
   color: #333;
 }
+
+.select,
+.input {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .container {
+      padding: 15px;
+  }
+
+  .buttonsContainer {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .createButton,
+  .backButton {
+      width: 100%;
+  }
+}
+
+.detallesTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color:black; 
+}
+
+.detallesTable th,
+.detallesTable td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.detallesTable th {
+  background-color: #f2f2f2;
+}
+
+.detallesTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.detallesTable tr:hover {
+  background-color: #e9ecef;
+}
+
+.deleteButton {
+  position: relative;
+  padding: 5px 10px;
+  background-color: #dc3545; /* Color de fondo rojo para el botón eliminar */
+  color: white; /* Color del texto para el botón eliminar */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+}
+
+.deleteButton:hover {
+  background-color: #c82333; /* Fondo más oscuro para el hover del botón eliminar */
+}
+
+.deleteButton::after {
+  content: "Eliminar";
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 120%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.deleteButton:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
