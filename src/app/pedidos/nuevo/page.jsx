@@ -10,18 +10,16 @@ import styles from './page.module.css';  // Importar los estilos
 export default function NewPedidoPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    fecha: new Date().toISOString(),
-    numeroPedido: '',
     usuario: '',
     observaciones: '',
     cliente: { id: '', nombre: '' }, // Cliente asociado al pedido
     obra: { id: '', nombre: '' },    // Obra asociada al pedido
     detalle: [],                     // Lista de detalles del pedido
-    total: 0,                        // Total del pedido
   });
 
   const [clientes, setClientes] = useState([]); // Lista de clientes
   const [obras, setObras] = useState([]);       // Lista de obras
+  const [usuarios, setUsuarios] = useState([]); // Lista de usuarios (asociados a los clientes)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,8 +39,12 @@ export default function NewPedidoPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.cliente.id || !formData.obra.id || formData.detalle.length === 0) {
+      alert('Debe seleccionar un cliente, una obra y agregar al menos un detalle.');
+      return;
+    }
     try {
-      await crearPedido(formData); // Envía el pedido al backend
+      const pedidoCreado = await crearPedido(formData); // Envía el pedido al backend
       router.push('/pedidos');    // Redirige a la lista de pedidos
     } catch (error) {
       console.error('Error al crear el pedido:', error);
@@ -62,7 +64,7 @@ export default function NewPedidoPage() {
     setFormData({ ...formData, detalle: nuevosDetalles });
   };
 
-  const handleClienteChange = (e) => {
+  const handleClienteChange = async (e) => {
     const clienteId = e.target.value;
     const clienteSeleccionado = clientes.find((cliente) => cliente.id === clienteId);
   
@@ -70,12 +72,19 @@ export default function NewPedidoPage() {
       setFormData({
         ...formData,
         cliente: { id: clienteId, nombre: clienteSeleccionado.nombre },
+        obra: { id: '', nombre: '' },  // Reseteamos la obra cuando cambia el cliente
+        detalle: [],                   // Reseteamos los detalles
       });
+      // Actualizamos los usuarios según el cliente seleccionado
+      setUsuarios(clienteSeleccionado.usuarios); 
     } else {
       setFormData({
         ...formData,
         cliente: { id: '', nombre: '' },
+        obra: { id: '', nombre: '' },
+        detalle: [],
       });
+      setUsuarios([]);  // Si no hay cliente, limpiamos los usuarios
     }
   };
 
@@ -100,18 +109,6 @@ export default function NewPedidoPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Crear nuevo pedido</h1>
       <form onSubmit={handleSubmit} className={styles.form}> {/* Aplicamos .form aquí */}
-        {/* Campo: Número de Pedido */}
-        <div className={styles.formGroup}>
-          <input
-            type="text"
-            placeholder="Número de Pedido"
-            value={formData.numeroPedido}
-            onChange={(e) => setFormData({ ...formData, numeroPedido: e.target.value })}
-            className={styles.input}
-            required
-          />
-        </div>
-
         {/* Campo: Usuario */}
         <div className={styles.formGroup}>
           <input
@@ -120,17 +117,6 @@ export default function NewPedidoPage() {
             value={formData.usuario}
             onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
             className={styles.input}
-            required
-          />
-        </div>
-
-        {/* Campo: Observaciones */}
-        <div className={styles.formGroup}>
-          <textarea
-            placeholder="Observaciones"
-            value={formData.observaciones}
-            onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
-            className={`${styles.input} ${styles.textarea}`}
           />
         </div>
 
@@ -162,7 +148,7 @@ export default function NewPedidoPage() {
             required
           >
             <option value="">Seleccione una obra</option>
-            {obras.map((obra) => (
+            {obras.filter(obra => obra.clienteId === formData.cliente.id).map((obra) => (
               <option key={obra.id} value={obra.id}>
                 {obra.nombre}
               </option>
@@ -206,15 +192,13 @@ export default function NewPedidoPage() {
           </button>
         </div>
 
-        {/* Total */}
-        <div className={styles.totalInput}>
-          <input
-            type="number"
-            value={formData.total}
-            onChange={(e) => setFormData({ ...formData, total: parseFloat(e.target.value) })}
-            className={styles.input}
-            placeholder="Total"
-            required
+        {/* Observaciones */}
+        <div className={styles.formGroup}>
+          <textarea
+            placeholder="Observaciones"
+            value={formData.observaciones}
+            onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
+            className={`${styles.input} ${styles.textarea}`}
           />
         </div>
 

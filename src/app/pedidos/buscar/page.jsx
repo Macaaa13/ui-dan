@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { buscarPedidosPorFiltro } from '@/lib/pedidos-api';
-import { obtenerClientes } from '@/lib/clientes-api'; // Importa obtenerClientes desde clientes-api
+import { obtenerClientes } from '@/lib/clientes-api';
 import Link from 'next/link';
+import styles from "./page.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 
 export default function BuscarPedidosPage() {
   const router = useRouter();
@@ -12,47 +15,49 @@ export default function BuscarPedidosPage() {
     estado: '',
   });
   const [resultados, setResultados] = useState([]);
-  const [clientes, setClientes] = useState([]); // Estado para almacenar la lista de clientes
+  const [clientes, setClientes] = useState([]); 
+  const [busquedaRealizada, setBusquedaRealizada] = useState(false);
 
   // Cargar clientes al iniciar la página
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const clientesData = await obtenerClientes(); // Usa obtenerClientes de clientes-api
+        const clientesData = await obtenerClientes();
         setClientes(clientesData);
       } catch (error) {
         console.error('Error al obtener clientes:', error);
       }
     };
-
     fetchClientes();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setBusquedaRealizada(false);
     try {
       const pedidos = await buscarPedidosPorFiltro(filtros);
       setResultados(pedidos);
+      setBusquedaRealizada(true);
     } catch (error) {
       console.error('Error al buscar pedidos:', error);
+      setBusquedaRealizada(true);
     }
   };
 
-  // Función para redirigir a la vista de actualización del estado
   const handleActualizarEstado = (pedidoId) => {
     router.push(`/pedidos/${pedidoId}/actualizar-estado`);
   };
 
   return (
-    <div>
-      <h1>Buscar Pedidos</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Combo desplegable para seleccionar cliente */}
-        <div>
-          <label>Cliente:</label>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Buscar Pedidos</h1>
+      <form onSubmit={handleSubmit} className={styles.filtersGroup}>
+        <div className={styles.filterRow}>
+          <label className={styles.label}>Cliente:</label>
           <select
             value={filtros.clienteId}
             onChange={(e) => setFiltros({ ...filtros, clienteId: e.target.value })}
+            className={styles.select}
           >
             <option value="">Seleccione un cliente</option>
             {clientes.map((cliente) => (
@@ -63,12 +68,12 @@ export default function BuscarPedidosPage() {
           </select>
         </div>
 
-        {/* Combo desplegable para seleccionar estado */}
-        <div>
-          <label>Estado:</label>
+        <div className={styles.filterRow}>
+          <label className={styles.label}>Estado:</label>
           <select
             value={filtros.estado}
             onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })}
+            className={styles.select}
           >
             <option value="">Seleccione un estado</option>
             <option value="RECIBIDO">Recibido</option>
@@ -80,50 +85,51 @@ export default function BuscarPedidosPage() {
           </select>
         </div>
 
-        {/* Botón para buscar */}
-        <button type="submit">Buscar</button>
+        <button type="submit" className={styles.button}>Buscar Pedidos</button>
       </form>
 
-      {/* Mostrar resultados de la búsqueda */}
-      <div>
-        <h2>Resultados de la búsqueda:</h2>
-        {resultados.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>Número de Pedido</th>
-                <th>Cliente</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resultados.map((pedido) => (
-                <tr key={pedido.id}>
-                  <td>
-                    <Link href={`/pedidos/${pedido.numeroPedido}`}>
-                      {pedido.numeroPedido}
-                    </Link>
-                  </td>
-                  <td>{pedido.cliente.nombre}</td>
-                  <td>{pedido.estado}</td>
-                  <td>
-                    <button onClick={() => handleActualizarEstado(pedido.numeroPedido)}>
-                      Actualizar Estado
-                    </button>
-                  </td>
+      <div className={styles.divResultados}>
+        <h2 className={styles.titleResultados}>Resultados de la búsqueda</h2>
+        {busquedaRealizada ? (
+          resultados.length > 0 ? (
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Número de Pedido</th>
+                  <th>Cliente</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {resultados.map((pedido) => (
+                  <tr key={pedido.id}>
+                    <td>
+                      <Link href={`/pedidos/${pedido.numeroPedido}`}>
+                        {pedido.numeroPedido}
+                      </Link>
+                    </td>
+                    <td>{pedido.cliente.nombre}</td>
+                    <td>{pedido.estado}</td>
+                    <td>
+                      <button onClick={() => handleActualizarEstado(pedido.id)} className={styles.updateButton}>
+                        <FontAwesomeIcon icon={faSync} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No se encontraron pedidos.</p>
+          )
         ) : (
-          <p>No se encontraron pedidos.</p>
+          <p>Realice una búsqueda para ver los resultados.</p>
         )}
       </div>
 
-      {/* Botón para volver al menú */}
       <Link href="/pedidos">
-        <button>Volver al Menú</button>
+        <button className={styles.backButton}>Volver al Menú</button>
       </Link>
     </div>
   );
