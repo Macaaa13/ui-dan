@@ -21,6 +21,27 @@ async function buscarObra(id, limit, offset = 0) {
       return [];
     }
   }
+
+  // Buscar obras de un cliente particular
+async function buscarObrasPorCliente(idCliente, limit = 10, offset = 0) {
+    const url = new URL(`${API_URL}/cliente/${idCliente}`);
+    url.searchParams.append('limit', limit);
+    url.searchParams.append('offset', offset);
+
+    console.log('Buscando obras del cliente en:', url.toString());
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error al obtener las obras del cliente:", error);
+        throw error;
+    }
+}
   
 // Crear un obra
 async function crearObra(obra) {
@@ -128,5 +149,6 @@ export {
     obtenerObras,
     eliminarObra,
     actualizarObra,
-    asignarClienteAObra
+    asignarClienteAObra,
+    buscarObrasPorCliente
 };

@@ -20,6 +20,23 @@ async function obtenerClientes() {
     }
 }
 
+// Obtener usuarios habilitados de un cliente
+async function obtenerUsuariosHabilitadosPorCliente(idCliente) {
+    const apiUrl = `${API_URL}/${idCliente}/usuarios-habilitados`;
+    console.log('Buscando usuarios habilitados para el cliente en: ', apiUrl);
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error al obtener los usuarios habilitados:", error);
+        throw error;
+    }
+}
+
 async function buscarClientesPorFiltro(filtros) {
     const { nombre, correoElectronico, cuit } = filtros;
 
@@ -154,5 +171,6 @@ export {
     crearCliente,
     actualizarCliente,
     agregarUsuariosHabilitados,
-    eliminarCliente
+    eliminarCliente,
+    obtenerUsuariosHabilitadosPorCliente
 };

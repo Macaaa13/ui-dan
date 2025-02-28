@@ -69,6 +69,7 @@
   margin-top: 20px;
 }
 
+.submitButton,
 .backButton,
 .createButton {
   padding: 10px 20px;
@@ -91,6 +92,16 @@
 }
 
 .createButton:hover {
+  background-color: #218838;
+}
+
+.submitButton {
+  background-color: #28a745;
+  border: none;
+  color: white;
+}
+
+.submitButton:hover {
   background-color: #218838;
 }
 

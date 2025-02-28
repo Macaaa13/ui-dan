@@ -3,13 +3,16 @@ import { useState, useEffect } from 'react';
 import { obtenerUsuariosHabilitadosPorCliente } from "@/lib/clientes-api";  
 import { buscarObrasPorCliente } from "@/lib/obras-api";
 import { obtenerClientes } from "@/lib/clientes-api";  
-import { obtenerProductos } from "@/lib/productos-api"; 
+import { obtenerProductos } from "@/lib/productos-api";
+import { crearPedido } from "@/lib/pedidos-api"; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';  // Importar Link para navegación
 import styles from "./page.module.css";
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+    const router = useRouter();
     const [clientes, setClientes] = useState([]);  
     const [clienteId, setClienteId] = useState("");  
     const [obras, setObras] = useState([]);  
@@ -131,7 +134,7 @@ export default function Page() {
     
         setDetallesPedido(prev => [
             ...prev,
-            { productoId, cantidad }
+            { productoId, cantidad, nombreProducto: selectedProducto.nombre }
         ]);
     
         setProductoId("");
@@ -147,16 +150,17 @@ export default function Page() {
             console.log("Error: Falta completar campos");
             return;
         }
-    
+
         // Crear el objeto del pedido
         const pedido = {
             clienteId,
+            obraId,
+            usuarioId: usuarioId || null, // Usuario opcional
+            observaciones: observaciones || '', // Observaciones opcionales
             productos: detallesPedido.map(detalle => ({
-            productoId: detalle.productoId,
-            cantidad: detalle.cantidad
+                productoId: detalle.productoId,
+                cantidad: detalle.cantidad,
             })),
-            total: calcularTotal(),  // Aquí deberías agregar tu lógica para calcular el total
-            estado: "pendiente",  // Puedes cambiar esto según tu flujo
         };
     
         try {
@@ -316,16 +320,16 @@ export default function Page() {
                     )}
                 </div>
 
+                {/* Botones */}
                 <div className={styles.buttonsContainer}>
-                    <Link href="/pedidos">
-                        <button type="button" className={styles.backButton}>
-                            Volver al Menú
-                        </button>
-                    </Link>
-                    <button type="submit" className={styles.createButton}>
-                        Crear Pedido
-                    </button>
+                <Link href="/productos">
+                    <button className={styles.backButton}>Volver al Menú</button>
+                </Link>
+                <button type="submit" className={styles.submitButton}>
+                    Crear Pedido
+                </button>
                 </div>
+                
             </form>
         </div>
     );
