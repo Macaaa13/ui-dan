@@ -1,4 +1,9 @@
+// Llamada directa al ms
 const API_URL = 'http://localhost:6080/api/obras';
+
+// Llamada al haproxy
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+//const API_URL = `${API_BASE_URL}/clientes/api/obras`;
 
 // Buscar obra por Id
 async function buscarObra(id, limit, offset = 0) {

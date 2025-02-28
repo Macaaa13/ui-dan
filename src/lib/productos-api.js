@@ -1,4 +1,9 @@
+// Llamada directa al ms
 const API_URL = 'http://localhost:6180/api/productos';
+
+// Llamada al haproxy
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+//const API_URL = `${API_BASE_URL}/productos/api/productos`;
 
 // Buscar producto por Id
 async function buscarProductoPorId(id, limit, offset = 0) {
