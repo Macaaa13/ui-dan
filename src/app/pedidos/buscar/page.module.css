@@ -1,0 +1,99 @@
+.container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 900px;
+  }
+  
+  .title {
+    font-size: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .form {
+    width: 100%;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .label {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .select {
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .resultados {
+    margin-top: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table th, .table td {
+    border: 2px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: #007BFF;
+  }
+  
+  .link:hover {
+    color: #0056b3;
+  }
+  
+  .backButton {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .backButton:hover {
+    background-color: #218838;
+  }
+  

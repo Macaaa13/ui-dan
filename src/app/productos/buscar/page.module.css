@@ -1,0 +1,145 @@
+.container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 900px; 
+  }
+  
+  .title {
+    font-size: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .filtersGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+.filtersColumn {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+}
+  
+  .label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .input {
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    color: black;
+    width: 360px;
+    width: 100%;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table th:nth-child(2) { width: 200px; } /* Nombre */
+  .table th:nth-child(3) { width: 200px; } /* Descripción */
+  .table th:nth-child(4) { width: 100px; } /* Stock mínimo */
+  .table th:nth-child(5) { width: 100px; } /* Stock actual */
+  .table th:nth-child(6) { width: 100px; } /* Precio */
+  .table th:nth-child(7) { width: 100px; } /* Descuento */
+  .table th:nth-child(8) { width: 150px; } /* Categoría */
+  .table th:nth-child(9) { width: 50px; } /* Acciones */
+  
+  .table th, .table td {
+    border: 2px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .table th {
+    background-color: #f4f4f4;
+    color: black;
+  }
+  
+  .deleteButton {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+  
+  .deleteButton::after {
+    content: "Eliminar";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 120%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+  
+  /* Mostrar el tooltip al pasar el mouse */
+  .deleteButton:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }  
+  
+  .backButton {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .backButton:hover {
+    background-color: #5a6268;
+  }
