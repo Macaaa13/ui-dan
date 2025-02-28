@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { buscarClientesPorFiltro } from '@/lib/clientes-api';
 import { obtenerObras, asignarClienteAObra } from '@/lib/obras-api';
-import styles from './page.module.css';
+import styles from './page.module.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -80,7 +80,8 @@ export default function ClientesBuscarPage() {
       <div className={styles.selectContainer}>
         <label className={styles.label}>
           Obra que se desea asignar
-          <select className={styles.input}
+          <select
+            className={styles.input}
             value={obraSeleccionada}
             onChange={(e) => setObraSeleccionada(e.target.value)}
           >
@@ -134,7 +135,6 @@ export default function ClientesBuscarPage() {
         </div>
 
         <button onClick={handleBuscar} className={styles.button}>Buscar Clientes</button>
-
       </div>
 
       {/* Tabla de resultados */}

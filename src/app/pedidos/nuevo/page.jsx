@@ -1,10 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { crearPedido  } from '@/lib/pedidos-api'; 
+import { crearPedido } from '@/lib/pedidos-api'; 
 import { obtenerObras } from '@/lib/obras-api'; 
 import { obtenerClientes } from '@/lib/clientes-api'; 
 import Link from 'next/link';
+import styles from './page.module.css';  // Importar los estilos
 
 export default function NewPedidoPage() {
   const router = useRouter();
@@ -22,7 +23,6 @@ export default function NewPedidoPage() {
   const [clientes, setClientes] = useState([]); // Lista de clientes
   const [obras, setObras] = useState([]);       // Lista de obras
 
-  // Obtener la lista de clientes y obras al cargar la página
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,7 +49,6 @@ export default function NewPedidoPage() {
     }
   };
 
-  // Función para agregar un detalle al pedido
   const agregarDetalle = () => {
     setFormData({
       ...formData,
@@ -57,14 +56,12 @@ export default function NewPedidoPage() {
     });
   };
 
-  // Función para actualizar un detalle del pedido
   const actualizarDetalle = (index, campo, valor) => {
     const nuevosDetalles = [...formData.detalle];
     nuevosDetalles[index][campo] = valor;
     setFormData({ ...formData, detalle: nuevosDetalles });
   };
 
-  // Función para manejar la selección de un cliente
   const handleClienteChange = (e) => {
     const clienteId = e.target.value;
     const clienteSeleccionado = clientes.find((cliente) => cliente.id === clienteId);
@@ -75,7 +72,6 @@ export default function NewPedidoPage() {
         cliente: { id: clienteId, nombre: clienteSeleccionado.nombre },
       });
     } else {
-      // Si no se encuentra el cliente, puedes limpiar el campo o manejarlo de otra manera
       setFormData({
         ...formData,
         cliente: { id: '', nombre: '' },
@@ -83,7 +79,6 @@ export default function NewPedidoPage() {
     }
   };
 
-  // Función para manejar la selección de una obra
   const handleObraChange = (e) => {
     const obraId = e.target.value;
     const obraSeleccionada = obras.find((obra) => obra.id === obraId);
@@ -94,7 +89,6 @@ export default function NewPedidoPage() {
         obra: { id: obraId, nombre: obraSeleccionada.nombre },
       });
     } else {
-      // Si no se encuentra la obra, puedes limpiar el campo o manejarlo de otra manera
       setFormData({
         ...formData,
         obra: { id: '', nombre: '' },
@@ -103,40 +97,50 @@ export default function NewPedidoPage() {
   };
 
   return (
-    <div>
-      <h1>Crear nuevo pedido</h1>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Crear nuevo pedido</h1>
+      <form onSubmit={handleSubmit} className={styles.form}> {/* Aplicamos .form aquí */}
         {/* Campo: Número de Pedido */}
-        <input
-          type="text"
-          placeholder="Número de Pedido"
-          value={formData.numeroPedido}
-          onChange={(e) => setFormData({ ...formData, numeroPedido: e.target.value })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <input
+            type="text"
+            placeholder="Número de Pedido"
+            value={formData.numeroPedido}
+            onChange={(e) => setFormData({ ...formData, numeroPedido: e.target.value })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: Usuario */}
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={formData.usuario}
-          onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
-          required
-        />
+        <div className={styles.formGroup}>
+          <input
+            type="text"
+            placeholder="Usuario"
+            value={formData.usuario}
+            onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
+            className={styles.input}
+            required
+          />
+        </div>
 
         {/* Campo: Observaciones */}
-        <textarea
-          placeholder="Observaciones"
-          value={formData.observaciones}
-          onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
-        />
+        <div className={styles.formGroup}>
+          <textarea
+            placeholder="Observaciones"
+            value={formData.observaciones}
+            onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
+            className={`${styles.input} ${styles.textarea}`}
+          />
+        </div>
 
         {/* Campo: Cliente */}
-        <div>
-          <label>Cliente:</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Cliente:</label>
           <select
             value={formData.cliente.id}
             onChange={handleClienteChange}
+            className={styles.input}
             required
           >
             <option value="">Seleccione un cliente</option>
@@ -149,11 +153,12 @@ export default function NewPedidoPage() {
         </div>
 
         {/* Campo: Obra */}
-        <div>
-          <label>Obra:</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Obra:</label>
           <select
             value={formData.obra.id}
             onChange={handleObraChange}
+            className={styles.input}
             required
           >
             <option value="">Seleccione una obra</option>
@@ -165,54 +170,62 @@ export default function NewPedidoPage() {
           </select>
         </div>
 
-        {/* Lista de Detalles del Pedido */}
-        <h3>Detalles del Pedido</h3>
-        {formData.detalle.map((detalle, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              placeholder="Producto"
-              value={detalle.producto}
-              onChange={(e) => actualizarDetalle(index, 'producto', e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Cantidad"
-              value={detalle.cantidad}
-              onChange={(e) => actualizarDetalle(index, 'cantidad', parseInt(e.target.value))}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Precio Unitario"
-              value={detalle.precioUnitario}
-              onChange={(e) => actualizarDetalle(index, 'precioUnitario', parseFloat(e.target.value))}
-              required
-            />
-          </div>
-        ))}
-        <button type="button" onClick={agregarDetalle}>
-          Agregar Detalle
-        </button>
+        {/* Detalles del Pedido */}
+        <div className={styles.detailsContainer}>
+          <h3>Detalles del Pedido</h3>
+          {formData.detalle.map((detalle, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                placeholder="Producto"
+                value={detalle.producto}
+                onChange={(e) => actualizarDetalle(index, 'producto', e.target.value)}
+                className={styles.input}
+                required
+              />
+              <input
+                type="number"
+                placeholder="Cantidad"
+                value={detalle.cantidad}
+                onChange={(e) => actualizarDetalle(index, 'cantidad', parseInt(e.target.value))}
+                className={styles.input}
+                required
+              />
+              <input
+                type="number"
+                placeholder="Precio Unitario"
+                value={detalle.precioUnitario}
+                onChange={(e) => actualizarDetalle(index, 'precioUnitario', parseFloat(e.target.value))}
+                className={styles.input}
+                required
+              />
+            </div>
+          ))}
+          <button type="button" onClick={agregarDetalle} className={styles.submitButton}>
+            Agregar detalle
+          </button>
+        </div>
 
-        {/* Campo: Total */}
-        <input
-          type="number"
-          placeholder="Total"
-          value={formData.total}
-          onChange={(e) => setFormData({ ...formData, total: parseFloat(e.target.value) })}
-          required
-        />
+        {/* Total */}
+        <div className={styles.totalInput}>
+          <input
+            type="number"
+            value={formData.total}
+            onChange={(e) => setFormData({ ...formData, total: parseFloat(e.target.value) })}
+            className={styles.input}
+            placeholder="Total"
+            required
+          />
+        </div>
 
-        {/* Botón para crear el pedido */}
-        <button type="submit">Crear Pedido</button>
+        {/* Botones de envío */}
+        <div className={styles.buttonsContainer}>
+          <button type="submit" className={styles.submitButton}>Crear Pedido</button>
+          <Link href="/pedidos" passHref>
+            <button type="button" className={styles.backButton}>Volver</button>
+          </Link>
+        </div>
       </form>
-
-      {/* Botón para volver al menú */}
-      <Link href="/pedidos">
-        <button>Volver al Menú</button>
-      </Link>
     </div>
   );
 }
